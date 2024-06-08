@@ -16,7 +16,8 @@ const localProcessedVideoPath = "./processed-videos";
  * Creates the local directories for raw and processed videos.
 */
 export function setupDirectories(){
-
+    ensureDirectoryExistence(localProcessedVideoPath);
+    ensureDirectoryExistence(localRawVideoPath);
 }
 
 /** 
@@ -99,3 +100,31 @@ function deleteFile(filePath: string): Promise<void>{
     });
 }
 
+/**
+ * 
+ * @param fileName  the name of the file to delete from the 
+ * {@link localRawVideoPath} folder.
+ * @returns A promise that resolves when the file has been deleted.
+ * 
+ */
+export function deleteRawVideo(fileName: string){
+    return deleteFile(`${localRawVideoPath}/${fileName}`);
+}
+
+/**
+ * 
+ * @param fileName  the name of the file to delete from the 
+ * {@link localProcessedVideoPath} folder.
+ * @returns A promise that resolves when the file has been deleted.
+ * 
+ */
+export function deleteProcessedVideo(fileName: string) {
+    return deleteFile(`${localProcessedVideoPath}/${fileName}`);
+}
+
+function ensureDirectoryExistence(dirPath: string){
+    if(!fs.existsSync(dirPath)){
+        fs.mkdirSync(dirPath, { recursive: true}); // recursive: true enables creating nested directories
+        console.log(`Directory created at ${dirPath}`);
+    }
+}
